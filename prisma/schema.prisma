@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Fund {
+  id              String    @id @default(uuid())
+  name            String
+  vintage_year    Int
+  target_size_usd Decimal
+  status          String
+  created_at      DateTime  @default(now())
+  investments     Investment[]
+  transactions    Transaction[]
+}
+
+model Investor {
+  id            String    @id @default(uuid())
+  name          String
+  investor_type String
+  email         String    @unique
+  created_at    DateTime  @default(now())
+  investments   Investment[]
+}
+
+model Investment {
+  id             String   @id @default(uuid())
+  investor_id    String
+  fund_id        String
+  amount_usd     Decimal
+  investment_date DateTime
+
+  investor Investor @relation(fields: [investor_id], references: [id])
+  fund     Fund     @relation(fields: [fund_id], references: [id])
+}
+
+model Transaction {
+  transaction_id    String   @id @default(uuid())
+  fund_id           String
+  amount            Decimal
+  fee_percentage    Decimal
+  calculated_fees   Decimal?
+  auto_calculate_fees Boolean @default(false)
+  bypass_validation Boolean  @default(false)
+  status            String
+  created_at        DateTime @default(now())
+  reversed_at       DateTime?
+  reversal_reason   String?
+
+  fund Fund @relation(fields: [fund_id], references: [id])
+}
