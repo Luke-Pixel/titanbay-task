@@ -13,8 +13,8 @@ export const getInvestmentsByFund = async (req: Request, res: Response) => {
         });
         res.json(investments);
     } catch {
-        if (investments === null) {
-            res.status(400).json({ error: 'Invalid fund ID' });
+        if (investments == null) {
+            res.status(404).json({ error: 'Invalid fund ID' });
         }
 
         res.status(500).json({ error: 'Unexpected server error' });
