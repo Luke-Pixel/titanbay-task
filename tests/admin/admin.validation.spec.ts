@@ -12,7 +12,7 @@ describe('Admin API - Validation', () => {
     });
 
     it('should reject invalid data types', async () => {
-        const res = await request(app)
+        await request(app)
             .post('/admin/recalculate-fees')
             .send({
                 fund_id: 'invalid',
