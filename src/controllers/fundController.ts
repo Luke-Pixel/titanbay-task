@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import prisma from '../utils/prisma';
-import { FundSchema } from '../utils/validation';
-import { z } from 'zod';
 
 export const getFunds = async (_req: Request, res: Response) => {
     const funds = await prisma.fund.findMany();
@@ -22,7 +20,7 @@ export const createFund = async (req: Request, res: Response) => {
             return res.status(404).json({ error: 'Fund not found' });
         }
         res.status(201).json(fund);
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: 'Unexpected server error' });
     }
 };

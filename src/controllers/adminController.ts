@@ -58,7 +58,7 @@ export const recalculateFees = async (req: Request, res: Response) => {
             new_fee_percentage,
             apply_retroactively,
         });
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: 'Failed to recalculate fees' });
     }
 };

@@ -5,7 +5,7 @@ export const getInvestors = async (_req: Request, res: Response) => {
     try {
         const investors = await prisma.investor.findMany();
         res.json(investors);
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: 'Failed to fetch investors' });
     }
 };

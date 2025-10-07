@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import prisma from '../utils/prisma';
-import { TransactionSchema } from '../utils/validation';
-import { z } from 'zod';
 
 export const getAllTransactions = async (_req: Request, res: Response) => {
     const transactions = await prisma.transaction.findMany();
@@ -34,7 +32,7 @@ export const processTransaction = async (req: Request, res: Response) => {
         });
 
         res.status(201).json(transaction);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: 'Failed to process transaction' });
     }
 };
@@ -69,7 +67,7 @@ export const reverseTransaction = async (req: Request, res: Response) => {
         });
 
         res.json(reversed);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: 'Failed to reverse transaction' });
     }
 };

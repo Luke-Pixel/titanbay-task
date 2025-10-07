@@ -1,8 +1,5 @@
 import { Request, Response } from 'express';
 import prisma from '../utils/prisma';
-import { InvestmentSchema } from '../utils/validation';
-import { z } from 'zod';
-import investments from '../routes/investments';
 
 export const getInvestmentsByFund = async (req: Request, res: Response) => {
     const { fund_id } = req.params;
@@ -51,7 +48,7 @@ export const createInvestment = async (req: Request, res: Response) => {
         });
 
         res.status(201).json(investment);
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: 'Failed to create investment' });
     }
 };
