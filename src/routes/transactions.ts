@@ -39,10 +39,25 @@ import { Router } from 'express';
 import * as transactionController from '../controllers/transactionController';
 import { validateBody } from '../middleware/validation';
 import { TransactionSchema } from '../utils/validation';
+import { z } from 'zod';
+
+const TransactionReverseSchema = z.object({
+    reason: z.string().min(1, 'Reversal reason is required'),
+    refund_fees: z.boolean().optional().default(false),
+});
+
 const router = Router();
 
 router.get('/', transactionController.getAllTransactions);
-router.post('/process', validateBody(TransactionSchema), transactionController.processTransaction);
-router.put('/:id/reverse', transactionController.reverseTransaction);
+router.post(
+    '/process',
+    validateBody(TransactionSchema),
+    transactionController.processTransaction,
+);
+router.put(
+    '/:id/reverse',
+    validateBody(TransactionReverseSchema),
+    transactionController.reverseTransaction,
+);
 
 export default router;

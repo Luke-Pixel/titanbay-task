@@ -6,18 +6,20 @@ import investments from '../routes/investments';
 
 export const getInvestmentsByFund = async (req: Request, res: Response) => {
     const { fund_id } = req.params;
+
     try {
+        const fund = await prisma.fund.findUnique({ where: { id: fund_id } });
+        if (!fund) {
+            return res.status(404).json({ error: 'Fund not found' });
+        }
+
         const investments = await prisma.investment.findMany({
             where: { fund_id },
             include: { investor: true },
         });
         res.json(investments);
     } catch {
-        if (investments == null) {
-            res.status(404).json({ error: 'Invalid fund ID' });
-        }
-
-        res.status(500).json({ error: 'Unexpected server error' });
+        res.status(500).json({ error: 'Failed to fetch investments' });
     }
 };
 
@@ -25,26 +27,31 @@ export const createInvestment = async (req: Request, res: Response) => {
     const { fund_id } = req.params;
 
     try {
-        const parsed = InvestmentSchema.parse(req.body);
-        const fund = await prisma.fund.findUnique({ where: { id: fund_id } });
-        const investor = await prisma.investor.findUnique({
-            where: { id: parsed.investor_id },
-        });
+        const { investor_id, amount_usd, investment_date } = req.body;
 
-        if (!fund || !investor)
-            return res
-                .status(404)
-                .json({ error: 'Fund or investor not found' });
+        const [fund, investor] = await Promise.all([
+            prisma.fund.findUnique({ where: { id: fund_id } }),
+            prisma.investor.findUnique({ where: { id: investor_id } }),
+        ]);
+
+        if (!fund) {
+            return res.status(404).json({ error: 'Fund not found' });
+        }
+        if (!investor) {
+            return res.status(404).json({ error: 'Investor not found' });
+        }
 
         const investment = await prisma.investment.create({
-            data: { ...parsed, fund_id },
+            data: {
+                investor_id,
+                fund_id,
+                amount_usd,
+                investment_date: new Date(investment_date),
+            },
         });
 
         res.status(201).json(investment);
     } catch (err) {
-        if (err instanceof z.ZodError)
-            return res.status(400).json({ error: err.issues });
-
-        res.status(500).json({ error: 'Unexpected server error' });
+        res.status(500).json({ error: 'Failed to create investment' });
     }
 };

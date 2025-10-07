@@ -10,26 +10,32 @@ export const getAllTransactions = async (_req: Request, res: Response) => {
 
 export const processTransaction = async (req: Request, res: Response) => {
     try {
-        const parsed = TransactionSchema.parse(req.body);
+        const { fund_id, amount, fee_percentage, auto_calculate_fees } =
+            req.body;
 
-        const fund = await prisma.fund.findUnique({
-            where: { id: parsed.fund_id },
-        });
-        if (!fund) return res.status(404).json({ error: 'Fund not found' });
+        const fund = await prisma.fund.findUnique({ where: { id: fund_id } });
+        if (!fund) {
+            return res.status(404).json({ error: 'Fund not found' });
+        }
 
-        const calculated_fees = parsed.auto_calculate_fees
-            ? (Number(parsed.amount) * Number(parsed.fee_percentage)) / 100
+        const calculated_fees = auto_calculate_fees
+            ? (Number(amount) * Number(fee_percentage)) / 100
             : null;
 
         const transaction = await prisma.transaction.create({
-            data: { ...parsed, calculated_fees },
+            data: {
+                fund_id,
+                amount,
+                fee_percentage,
+                calculated_fees,
+                auto_calculate_fees,
+                status: 'completed',
+            },
         });
 
         res.status(201).json(transaction);
-    } catch (err) {
-        if (err instanceof z.ZodError)
-            return res.status(400).json({ error: err.issues });
-        res.status(500).json({ error: 'Unexpected server error' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to process transaction' });
     }
 };
 
@@ -42,12 +48,15 @@ export const reverseTransaction = async (req: Request, res: Response) => {
             where: { transaction_id: id },
         });
 
-        if (!existing)
+        if (!existing) {
             return res.status(404).json({ error: 'Transaction not found' });
-        if (existing.status !== 'completed')
-            return res
-                .status(400)
-                .json({ error: 'Only completed transactions can be reversed' });
+        }
+
+        if (existing.status !== 'completed') {
+            return res.status(400).json({
+                error: 'Only completed transactions can be reversed',
+            });
+        }
 
         const reversed = await prisma.transaction.update({
             where: { transaction_id: id },
@@ -60,7 +69,7 @@ export const reverseTransaction = async (req: Request, res: Response) => {
         });
 
         res.json(reversed);
-    } catch {
-        res.status(400).json({ error: 'Error reversing transaction' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to reverse transaction' });
     }
 };

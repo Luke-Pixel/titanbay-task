@@ -65,8 +65,8 @@ describe('Investors API - Validation', () => {
         const res = await request(app)
             .post('/investors')
             .send(validInvestor)
-            .expect(500);
+            .expect(409);
 
-        expect(res.body.error).toEqual('Unexpected server error');
+        expect(res.body.error).toEqual('Email already exists');
     });
 });

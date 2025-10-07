@@ -17,14 +17,12 @@ export const getFundById = async (req: Request, res: Response) => {
 
 export const createFund = async (req: Request, res: Response) => {
     try {
-        const parsed = FundSchema.parse(req.body);
-
-        const fund = await prisma.fund.create({ data: parsed });
+        const fund = await prisma.fund.create({ data: req.body });
+        if (!fund) {
+            return res.status(404).json({ error: 'Fund not found' });
+        }
         res.status(201).json(fund);
     } catch (err) {
-        if (err instanceof z.ZodError) {
-            return res.status(400).json({ error: err.issues });
-        }
         res.status(500).json({ error: 'Unexpected server error' });
     }
 };
@@ -61,6 +59,6 @@ export const getFundTotalValue = async (req: Request, res: Response) => {
             transaction_count: transactions.length,
         });
     } catch {
-        res.status(400).json({ error: 'Could not calculate total value' });
+        res.status(500).json({ error: 'Failed to calculate total value' });
     }
 };
