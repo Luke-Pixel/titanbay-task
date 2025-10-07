@@ -14,15 +14,16 @@
  *       201:
  *         description: Transaction processed successfully
  *
- * /transactions/{transactionId}/reverse:
+ * /transactions/{id}/reverse:
  *   put:
  *     summary: Reverse an existing transaction
  *     tags: [Transactions]
  *     parameters:
  *       - in: path
- *         name: transactionId
+ *         name: id
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *         required: true
  *     requestBody:
  *       required: true

@@ -1,23 +1,25 @@
 /**
  * @openapi
- * /funds/{fundId}/investments:
+ * /funds/{fund_id}/investments:
  *   get:
  *     summary: Get all investments for a fund
  *     tags: [Investments]
  *     parameters:
  *       - in: path
- *         name: fundId
+ *         name: fund_id
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *         required: true
  *   post:
  *     summary: Create a new investment in a fund
  *     tags: [Investments]
  *     parameters:
  *       - in: path
- *         name: fundId
+ *         name: fund_id
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *         required: true
  *     requestBody:
  *       required: true
