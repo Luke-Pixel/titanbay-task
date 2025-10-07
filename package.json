@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "test": "jest --detectOpenHandles --runInBand --coverage"
+    "start": "node dist/server.js",
+    "test": "jest --detectOpenHandles --runInBand --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
   },
   "type": "commonjs",
   "keywords": [],

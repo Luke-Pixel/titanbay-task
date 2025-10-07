@@ -10,7 +10,8 @@ describe('Funds API - Validation', () => {
             })
             .expect(400);
 
-        expect(res.body.error).toEqual([
+        expect(res.body.error).toEqual('Validation failed');
+        expect(res.body.details).toEqual([
             {
                 code: 'invalid_type',
                 expected: 'string',
@@ -43,7 +44,8 @@ describe('Funds API - Validation', () => {
             })
             .expect(400);
 
-        expect(res.body.error).toEqual([
+        expect(res.body.error).toEqual('Validation failed');
+        expect(res.body.details).toEqual([
             {
                 code: 'invalid_type',
                 expected: 'string',

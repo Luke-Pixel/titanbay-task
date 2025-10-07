@@ -32,10 +32,16 @@
 
 import { Router } from 'express';
 import * as investmentController from '../controllers/investmentController';
+import { validateBody } from '../middleware/validation';
+import { InvestmentSchema } from '../utils/validation';
 
 const router = Router({ mergeParams: true });
 
 router.get('/', investmentController.getInvestmentsByFund);
-router.post('/', investmentController.createInvestment);
+router.post(
+    '/',
+    validateBody(InvestmentSchema),
+    investmentController.createInvestment,
+);
 
 export default router;

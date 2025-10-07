@@ -20,7 +20,8 @@ describe('Investments API - Validation', () => {
             .send({})
             .expect(400);
 
-        expect(res.body.error).toEqual([
+        expect(res.body.error).toEqual('Validation failed');
+        expect(res.body.details).toEqual([
             {
                 code: 'invalid_type',
                 expected: 'string',
@@ -52,7 +53,8 @@ describe('Investments API - Validation', () => {
             })
             .expect(400);
 
-        expect(res.body.error).toEqual([
+        expect(res.body.error).toEqual('Validation failed');
+        expect(res.body.details).toEqual([
             {
                 code: 'invalid_type',
                 expected: 'string',

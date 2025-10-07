@@ -17,7 +17,9 @@
 
 import { Router } from 'express';
 import * as adminController from '../controllers/adminController';
+import { validateBody } from '../middleware/validation';
+import { AdminFeeSchema } from '../utils/validation';
 
 const router = Router();
-router.post('/recalculate-fees', adminController.recalculateFees);
+router.post('/recalculate-fees', validateBody(AdminFeeSchema), adminController.recalculateFees);
 export default router;

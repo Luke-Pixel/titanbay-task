@@ -23,10 +23,15 @@
 
 import { Router } from 'express';
 import * as investorController from '../controllers/investorController';
-
+import { validateBody } from '../middleware/validation';
+import { InvestorSchema } from '../utils/validation';
 const router = Router();
 
 router.get('/', investorController.getInvestors);
-router.post('/', investorController.createInvestor);
+router.post(
+    '/',
+    validateBody(InvestorSchema),
+    investorController.createInvestor,
+);
 
 export default router;

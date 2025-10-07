@@ -45,7 +45,6 @@ export const createInvestment = async (req: Request, res: Response) => {
         if (err instanceof z.ZodError)
             return res.status(400).json({ error: err.issues });
 
-        console.error(err);
         res.status(500).json({ error: 'Unexpected server error' });
     }
 };

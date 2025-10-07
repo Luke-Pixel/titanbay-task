@@ -8,7 +8,13 @@ export const errorHandler = (
     next: NextFunction,
 ) => {
     if (err instanceof ZodError) {
-        return res.status(400).json({ validationErrors: err.issues });
+        return res
+            .status(400)
+            .json({ error: 'Validation failed', details: err.issues });
     }
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({
+        error: 'Internal server error',
+        message:
+            process.env.NODE_ENV === 'development' ? err.message : undefined,
+    });
 };

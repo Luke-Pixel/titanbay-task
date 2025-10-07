@@ -5,7 +5,8 @@ describe('Investors API - Validation', () => {
     it('should reject missing required fields', async () => {
         const res = await request(app).post('/investors').send({}).expect(400);
 
-        expect(res.body.error).toEqual([
+        expect(res.body.error).toEqual('Validation failed');
+        expect(res.body.details).toEqual([
             {
                 code: 'invalid_type',
                 expected: 'string',
@@ -38,7 +39,8 @@ describe('Investors API - Validation', () => {
             })
             .expect(400);
 
-        expect(res.body.error).toEqual([
+        expect(res.body.error).toEqual('Validation failed');
+        expect(res.body.details).toEqual([
             {
                 code: 'invalid_format',
                 format: 'email',

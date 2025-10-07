@@ -37,11 +37,12 @@
 
 import { Router } from 'express';
 import * as transactionController from '../controllers/transactionController';
-
+import { validateBody } from '../middleware/validation';
+import { TransactionSchema } from '../utils/validation';
 const router = Router();
 
 router.get('/', transactionController.getAllTransactions);
-router.post('/process', transactionController.processTransaction);
+router.post('/process', validateBody(TransactionSchema), transactionController.processTransaction);
 router.put('/:id/reverse', transactionController.reverseTransaction);
 
 export default router;

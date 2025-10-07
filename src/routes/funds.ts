@@ -48,11 +48,13 @@
 import { Router } from 'express';
 import * as fundController from '../controllers/fundController';
 import investmentsRouter from './investments';
+import { validateBody } from '../middleware/validation';
+import { FundSchema } from '../utils/validation';
 
 const router = Router();
 
 router.get('/', fundController.getFunds);
-router.post('/', fundController.createFund);
+router.post('/', validateBody(FundSchema), fundController.createFund);
 router.get('/:id', fundController.getFundById);
 router.use('/:fund_id/investments', investmentsRouter);
 router.get('/:id/total-value', fundController.getFundTotalValue);

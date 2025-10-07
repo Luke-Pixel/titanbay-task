@@ -33,3 +33,10 @@ export const TransactionSchema = z.object({
     bypass_validation: z.boolean().optional().default(false),
     status: z.enum(['completed', 'pending', 'reversed']),
 });
+
+// ---- ADMIN ----
+export const AdminFeeSchema = z.object({
+    fund_id: z.string().uuid(),
+    new_fee_percentage: z.number().min(0).max(100),
+    apply_retroactively: z.boolean().optional().default(false),
+});

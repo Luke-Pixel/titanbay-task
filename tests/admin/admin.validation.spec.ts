@@ -8,7 +8,7 @@ describe('Admin API - Validation', () => {
             .send({})
             .expect(400);
 
-        expect(res.body.error).toEqual('Error recalculating fees');
+        expect(res.body.error).toEqual('Validation failed');
     });
 
     it('should reject invalid data types', async () => {
@@ -19,11 +19,11 @@ describe('Admin API - Validation', () => {
                 new_fee_percentage: 'high',
                 apply_retroactively: 'yes',
             })
-            .expect(404);
+            .expect(400);
     });
 
     it('should reject nonexistent fund ID', async () => {
-        const res = await request(app)
+        await request(app)
             .post('/admin/recalculate-fees')
             .send({
                 fund_id: 99999,

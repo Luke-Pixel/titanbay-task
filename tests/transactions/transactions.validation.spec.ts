@@ -21,7 +21,8 @@ describe('Transactions API - Validation', () => {
             })
             .expect(400);
 
-        expect(res.body.error).toEqual([
+        expect(res.body.error).toEqual('Validation failed');
+        expect(res.body.details).toEqual([
             {
                 code: 'invalid_format',
                 format: 'uuid',
