@@ -1,6 +1,6 @@
 # 🏦 Titanbay Take-Home Technical Task
 
-This project is a **Node.js + Express + Prisma + PostgreSQL** API that simulates a private investment management platform for Titanbay.  
+This project is a **Node.js + Express + Prisma + PostgreSQL** API that simulates a private investment management platform.  
 It includes fully functional CRUD endpoints, schema validation with **Zod**, tests using **Jest + Supertest**, and interactive **Swagger API documentation**.
 
 ---
