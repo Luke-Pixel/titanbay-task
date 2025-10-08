@@ -137,14 +137,6 @@ npm test -- --coverage
 - Middleware `validateBody()` ensures all requests are type-safe
 - Centralized `errorHandler` for consistent responses
 
-**Example validation error**
-
-```json
-{
-    "error": [{ "path": ["fund_id"], "message": "fund_id is required" }]
-}
-```
-
 ---
 
 ## 🧱 Example Usage
